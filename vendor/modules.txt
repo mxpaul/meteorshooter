@@ -31,6 +31,7 @@ github.com/hajimehoshi/ebiten/v2
 github.com/hajimehoshi/ebiten/v2/audio
 github.com/hajimehoshi/ebiten/v2/audio/internal/convert
 github.com/hajimehoshi/ebiten/v2/audio/vorbis
+github.com/hajimehoshi/ebiten/v2/audio/wav
 github.com/hajimehoshi/ebiten/v2/colorm
 github.com/hajimehoshi/ebiten/v2/internal/affine
 github.com/hajimehoshi/ebiten/v2/internal/atlas

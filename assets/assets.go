@@ -22,6 +22,7 @@ var (
 	CanonShootBytes    = mustLoadOgg("sfx/canon_shoot.ogg")
 	PlayerHitBytes     = mustLoadOgg("sfx/player_hit.ogg")
 	MeteorExplodeBytes = mustLoadOgg("sfx/meteor_explode.ogg")
+	SpaceAmbientWav    = mustLoadFile("music/spaceambient.wav")
 )
 
 const SampleRate = 44100
@@ -67,6 +68,21 @@ func mustLoadOgg(name string) (b []byte) {
 		panic(err)
 	}
 	b, err = io.ReadAll(s)
+	if err != nil {
+		panic(err)
+	}
+
+	return b
+}
+
+func mustLoadFile(name string) (b []byte) {
+	f, err := assets.Open(name)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	b, err = io.ReadAll(f)
 	if err != nil {
 		panic(err)
 	}

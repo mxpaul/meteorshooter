@@ -1,6 +1,8 @@
 package game
 
 import (
+	"bytes"
+	"fmt"
 	"image/color"
 	"log"
 	"math"
@@ -9,6 +11,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/hajimehoshi/ebiten/v2/audio/wav"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 
 	"gametry/assets"
@@ -34,6 +37,7 @@ func Halves(sprite *ebiten.Image) (w, h float64) {
 type Game struct {
 	Window           Window
 	AudioContext     *audio.Context
+	BGPlayer         *audio.Player
 	Player           Player
 	Missle           []*Missle
 	MeteorSpawnTimer *Timer
@@ -75,11 +79,31 @@ func ExcludeIndexFuckOrder[T any](s []T, i int) ([]T, int) {
 	return s, i
 }
 
-func (g *Game) Update() error {
-	if g.AudioContext == nil {
-		g.AudioContext = audio.NewContext(assets.SampleRate)
+func (g *Game) AudioInit() error {
+	g.AudioContext = audio.NewContext(assets.SampleRate)
+	wavDecoded, err := wav.Decode(g.AudioContext, bytes.NewReader(assets.SpaceAmbientWav))
+	if err != nil {
+		return fmt.Errorf("background track wav decode error: %w", err)
 	}
-	if err := g.Player.Update(g); err != nil {
+
+	loop := audio.NewInfiniteLoop(wavDecoded, wavDecoded.Length())
+	g.BGPlayer, err = g.AudioContext.NewPlayer(loop)
+	if err != nil {
+		return fmt.Errorf("background track player create error: %w", err)
+	}
+	g.BGPlayer.SetVolume(0.3)
+	log.Printf("space ambient: decoded size: %d; volume :%v;", wavDecoded.Length(), g.BGPlayer.Volume())
+	g.BGPlayer.Play()
+	return nil
+}
+
+func (g *Game) Update() (err error) {
+	if g.AudioContext == nil {
+		if err = g.AudioInit(); err != nil {
+			return fmt.Errorf("audio context init failed: %w", err)
+		}
+	}
+	if err = g.Player.Update(g); err != nil {
 		return err
 	}
 
@@ -141,7 +165,7 @@ func (g *Game) UpdateCollisions() {
 		for j := 0; i > -1 && i < len(g.Missle) && j < len(g.Meteor); j++ {
 			m := g.Meteor[j]
 			if g.Missle[i].IntersectsCircle(m.Position, m.Radius()) {
-				log.Printf("HIT! Missle: %v Meteor: %v", i, j)
+				// log.Printf("HIT! Missle: %v Meteor: %v", i, j)
 				g.Missle, i = ExcludeIndexFuckOrder(g.Missle, i)
 				g.Meteor, j = ExcludeIndexFuckOrder(g.Meteor, j)
 				g.AudioContext.NewPlayerFromBytes(assets.MeteorExplodeBytes).Play()
