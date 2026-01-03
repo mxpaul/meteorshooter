@@ -14,7 +14,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/audio/wav"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 
-	"gametry/assets"
+	"github.com/mxpaul/meteorshooter/assets"
 )
 
 const WindowWidthPixels = 1600

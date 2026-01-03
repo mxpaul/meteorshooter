@@ -1,8 +1,9 @@
 package game
 
 import (
-	"gametry/assets"
 	"math"
+
+	"github.com/mxpaul/meteorshooter/assets"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )

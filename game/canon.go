@@ -8,7 +8,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/colorm"
 
-	"gametry/assets"
+	"github.com/mxpaul/meteorshooter/assets"
 )
 
 type CanonSimple struct {

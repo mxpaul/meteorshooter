@@ -2,8 +2,9 @@ package game
 
 import (
 	"fmt"
-	"gametry/assets"
 	"math"
+
+	"github.com/mxpaul/meteorshooter/assets"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/audio"

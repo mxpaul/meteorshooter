@@ -1,4 +1,4 @@
-module gametry
+module github.com/mxpaul/meteorshooter
 
 go 1.24.11
 
