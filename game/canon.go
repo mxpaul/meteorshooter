@@ -48,9 +48,25 @@ func (c *CanonSimple) Update(g *Game, newPosition Vector) error {
 func (c *CanonSimple) HandleRotation() error {
 	speed := 1.2 * math.Pi / float64(ebiten.TPS())
 
-	if ebiten.IsKeyPressed(ebiten.KeyEnd) {
+	switch {
+	case ebiten.IsKeyPressed(ebiten.KeyW) && ebiten.IsKeyPressed(ebiten.KeyD):
+		c.Rotation = math.Pi / 4.0
+	case ebiten.IsKeyPressed(ebiten.KeyW) && ebiten.IsKeyPressed(ebiten.KeyA):
+		c.Rotation = -math.Pi / 4.0
+	case ebiten.IsKeyPressed(ebiten.KeyS) && ebiten.IsKeyPressed(ebiten.KeyD):
+		c.Rotation = 3.0 * math.Pi / 4.0
+	case ebiten.IsKeyPressed(ebiten.KeyS) && ebiten.IsKeyPressed(ebiten.KeyA):
+		c.Rotation = -3.0 * math.Pi / 4.0
+	case ebiten.IsKeyPressed(ebiten.KeyW):
 		c.Rotation = 0
+	case ebiten.IsKeyPressed(ebiten.KeyS):
+		c.Rotation = math.Pi
+	case ebiten.IsKeyPressed(ebiten.KeyD):
+		c.Rotation = math.Pi / 2.0
+	case ebiten.IsKeyPressed(ebiten.KeyA):
+		c.Rotation = -math.Pi / 2.0
 	}
+
 	if ebiten.IsKeyPressed(ebiten.KeyDelete) {
 		c.Rotation -= speed
 	}
